@@ -146,13 +146,14 @@ function renderDay(day) {
   });
 
   Object.entries(day.tasks).forEach(([block, tasks]) => {
+    const blockResourceUrl = tasks.map(task => getResourceUrl(task)).find(Boolean) || getDayResourceUrl(day, block);
     const section = document.createElement("section");
     section.className = "block";
     section.innerHTML = `<div class="block__header"><span class="block__name"><span class="block__code">${block}</span>${BLOCKS[block].label}</span><span>${BLOCKS[block].minutes} min</span></div><ul class="task-list"></ul>`;
     const list = section.querySelector(".task-list");
     tasks.forEach((task, index) => {
       const key = taskKey(day.id, block, index);
-      const resourceUrl = getResourceUrl(task);
+      const resourceUrl = getResourceUrl(task) || blockResourceUrl;
       const item = document.createElement("li");
       item.className = "task";
       item.innerHTML = `<input type="checkbox" aria-label="${escapeHTML(task)}"><span>${renderTaskText(task, resourceUrl)}</span>`;
@@ -431,6 +432,25 @@ function formData(form) {
 function renderTaskText(task, resourceUrl) {
   if (!resourceUrl) return escapeHTML(task);
   return `<a class="resource-link" href="${escapeHTML(resourceUrl)}" target="_blank" rel="noopener noreferrer">${escapeHTML(task)}</a>`;
+}
+
+function getDayResourceUrl(day, block) {
+  if (block === "J") return "https://www.linkedin.com/jobs/";
+  if (block === "Q") return getStudyResourceUrl(day);
+  if (block === "LOG") return getStudyResourceUrl(day);
+  if (block === "R" || block === "C") return getStudyResourceUrl(day);
+  if (block === "I" && day.week <= 2) return "https://leetcode.com";
+  if (block === "I" && day.week === 3) return "https://github.com/rasbt/LLMs-from-scratch";
+  if (block === "I" && day.week === 4 && /system|design|crawler|agent/i.test(day.title)) return "https://github.com/donnemartin/system-design-primer";
+  if (block === "I" && day.week === 4) return "https://leetcode.com";
+  return "";
+}
+
+function getStudyResourceUrl(day) {
+  if (day.week <= 2) return "https://github.com/ageron/handson-mlp";
+  if (day.week === 3) return "https://github.com/rasbt/LLMs-from-scratch";
+  if (day.week === 4) return "https://github.com/microsoft/ai-agents-for-beginners";
+  return "https://github.com/ageron/handson-mlp";
 }
 
 function csv(value) { return `"${String(value).replaceAll('"', '""')}"`; }
