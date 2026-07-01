@@ -20,6 +20,7 @@ import {
 import { showToast } from "./notifications.js";
 import { KANBAN_COLUMNS, normalizeStatus } from "./applications.js";
 import { normalizeProgress, taskKey } from "./progress.js";
+import { getResourceUrl } from "./resources.js";
 import { getStreaks } from "./statistics.js";
 import { escapeHTML, formatDate, toLocalDateString } from "./tracker.js";
 
@@ -151,9 +152,10 @@ function renderDay(day) {
     const list = section.querySelector(".task-list");
     tasks.forEach((task, index) => {
       const key = taskKey(day.id, block, index);
+      const resourceUrl = getResourceUrl(task);
       const item = document.createElement("li");
       item.className = "task";
-      item.innerHTML = `<input type="checkbox" aria-label="${escapeHTML(task)}"><span>${escapeHTML(task)}</span>`;
+      item.innerHTML = `<input type="checkbox" aria-label="${escapeHTML(task)}"><span>${renderTaskText(task, resourceUrl)}</span>`;
       const checkbox = item.querySelector("input");
       checkbox.checked = Boolean(progress.checks[key]);
       checkbox.disabled = !user;
@@ -424,6 +426,11 @@ function selectField(label, name, value) {
 
 function formData(form) {
   return Object.fromEntries(new FormData(form).entries());
+}
+
+function renderTaskText(task, resourceUrl) {
+  if (!resourceUrl) return escapeHTML(task);
+  return `<a class="resource-link" href="${escapeHTML(resourceUrl)}" target="_blank" rel="noopener noreferrer">${escapeHTML(task)}</a>`;
 }
 
 function csv(value) { return `"${String(value).replaceAll('"', '""')}"`; }

@@ -1,4 +1,4 @@
-const CACHE_NAME = "ml-tracker-v2";
+const CACHE_NAME = "ml-tracker-v4";
 const ASSETS = [
   "./",
   "./index.html",
@@ -11,6 +11,7 @@ const ASSETS = [
   "./js/firestore.js",
   "./js/notifications.js",
   "./js/progress.js",
+  "./js/resources.js",
   "./js/statistics.js",
   "./js/tracker.js",
   "./firebase-config.js",
