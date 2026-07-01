@@ -1,4 +1,4 @@
-const BLOCKS = {
+export const BLOCKS = {
   R: { label: "Theory / reading", minutes: 60 },
   C: { label: "Hands-on coding / project", minutes: 90 },
   Q: { label: "Flashcards / recall", minutes: 25 },
@@ -9,7 +9,7 @@ const BLOCKS = {
 
 const day = (id, date, weekday, week, title, tasks) => ({ id, date, weekday, week, title, tasks });
 
-const PLAN = [
+export const PLAN = [
   day(1,"2026-07-01","Wednesday",1,"Setup and ML Landscape",{
     R:["Hands-on ML: 01_the_machine_learning_landscape.ipynb","Review ML types, batch vs. online learning, instance vs. model-based learning, and generalization","MLJobSearch2025 questions 1–5"],
     C:["Create repo folders: ml, llm, agents, system_design, leetcode, behavioral, job_search","Clone or bookmark all approved resources","Create Kaggle Titanic notebook and inspect shape, labels, missing values, and class balance","Commit day01_setup_and_eda"],

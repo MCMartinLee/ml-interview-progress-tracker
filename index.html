@@ -3,180 +3,113 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="description" content="Interactive 25-day ML interview and job-search progress tracker" />
+  <meta name="description" content="Firebase-backed ML interview and job-search progress tracker" />
+  <meta name="theme-color" content="#3157d5" />
   <title>ML Interview Sprint Tracker</title>
-  <link rel="stylesheet" href="styles.css" />
+  <link rel="manifest" href="manifest.json" />
+  <link rel="icon" href="assets/icon.svg" />
+  <link rel="stylesheet" href="css/styles.css" />
 </head>
 <body>
-  <header class="hero">
-    <div class="hero__content">
-      <div>
-        <p class="eyebrow">July 1–25, 2026 · 125 hours</p>
-        <h1>ML Interview Sprint Tracker</h1>
-        <p class="subtitle">Track theory, coding, recall, mock interviews, applications, and daily reflections.</p>
-      </div>
-      <div class="hero__actions">
-        <button id="exportBtn" class="button button--secondary">Export progress</button>
-        <label class="button button--secondary file-button">
-          Import progress
-          <input id="importInput" type="file" accept="application/json" hidden />
-        </label>
-        <button id="resetBtn" class="button button--danger">Reset</button>
-      </div>
+  <header class="app-header">
+    <div>
+      <p class="eyebrow">July 1-25, 2026 - 125 hours</p>
+      <h1>ML Interview Sprint Tracker</h1>
+      <p class="subtitle">A synchronized dashboard for study progress, interviews, and job search execution.</p>
+    </div>
+    <div class="auth-panel">
+      <div id="syncStatus" class="sync-status">Offline</div>
+      <button id="installBtn" class="button button--secondary" hidden>Install</button>
+      <button id="themeBtn" class="button button--secondary">Theme</button>
+      <button id="loginBtn" class="button">Sign in with Google</button>
+      <button id="logoutBtn" class="button button--secondary" hidden>Logout</button>
+      <img id="userAvatar" class="avatar" alt="" hidden />
+      <span id="userName" class="user-name">Please sign in</span>
     </div>
   </header>
 
-  <main class="layout">
-    <section class="dashboard" aria-label="Progress dashboard">
-      <article class="metric metric--primary">
-        <span class="metric__label">Overall completion</span>
-        <strong id="overallPercent" class="metric__value">0%</strong>
-        <div class="progress"><span id="overallBar"></span></div>
-      </article>
-      <article class="metric">
-        <span class="metric__label">Completed time</span>
-        <strong id="hoursComplete" class="metric__value">0 / 125 h</strong>
-      </article>
-      <article class="metric">
-        <span class="metric__label">Days fully complete</span>
-        <strong id="daysComplete" class="metric__value">0 / 25</strong>
-      </article>
-      <article class="metric">
-        <span class="metric__label">Applications logged</span>
-        <strong id="applicationsCount" class="metric__value">0</strong>
-      </article>
+  <main class="layout app-disabled" id="appRoot" aria-live="polite">
+    <section id="signinNotice" class="notice">Please sign in to edit and sync your tracker across devices.</section>
+
+    <section class="dashboard" aria-label="Dashboard">
+      <article class="metric metric--primary"><span>Overall Progress</span><strong id="overallPercent">0%</strong><div class="progress"><span id="overallBar"></span></div></article>
+      <article class="metric"><span>Hours Completed</span><strong id="hoursComplete">0.0</strong></article>
+      <article class="metric"><span>Remaining Hours</span><strong id="hoursRemaining">125.0</strong></article>
+      <article class="metric"><span>Days Completed</span><strong id="daysComplete">0 / 25</strong></article>
+      <article class="metric"><span>Applications Submitted</span><strong id="applicationsCount">0</strong></article>
+      <article class="metric"><span>Interviews</span><strong id="interviewsCount">0</strong></article>
+      <article class="metric"><span>Offers</span><strong id="offersCount">0</strong></article>
+      <article class="metric"><span>LeetCode Solved</span><strong id="leetcodeCount">0</strong></article>
+      <article class="metric"><span>Flashcards Created</span><strong id="flashcardsCount">0</strong></article>
+      <article class="metric"><span>Current Streak</span><strong id="currentStreak">0</strong></article>
+      <article class="metric"><span>Longest Streak</span><strong id="longestStreak">0</strong></article>
+    </section>
+
+    <section class="analytics-grid">
+      <div class="panel">
+        <div class="section-heading"><h2>Category Analytics</h2></div>
+        <div id="categoryStats" class="category-stats"></div>
+      </div>
+      <div class="panel">
+        <div class="section-heading"><h2>Weekly Progress</h2></div>
+        <div id="weeklyChart" class="bar-chart"></div>
+      </div>
+      <div class="panel panel--wide">
+        <div class="section-heading"><h2>Daily Completion Heatmap</h2></div>
+        <div id="heatmap" class="heatmap"></div>
+      </div>
     </section>
 
     <section id="todayPanel" class="today-panel" hidden>
-      <div>
-        <p class="eyebrow">Today's target</p>
-        <h2 id="todayTitle"></h2>
-      </div>
+      <div><p class="eyebrow">Today's target</p><h2 id="todayTitle"></h2></div>
       <button id="jumpTodayBtn" class="button">Open today</button>
     </section>
 
     <section class="controls" aria-label="Schedule filters">
-      <div class="control-group">
-        <label for="weekFilter">Week</label>
-        <select id="weekFilter">
-          <option value="all">All weeks</option>
-          <option value="1">Week 1</option>
-          <option value="2">Week 2</option>
-          <option value="3">Week 3</option>
-          <option value="4">Week 4</option>
-        </select>
-      </div>
-      <div class="control-group">
-        <label for="statusFilter">Status</label>
-        <select id="statusFilter">
-          <option value="all">All days</option>
-          <option value="incomplete">Incomplete</option>
-          <option value="complete">Complete</option>
-        </select>
-      </div>
-      <div class="control-group control-group--search">
-        <label for="searchInput">Search tasks</label>
-        <input id="searchInput" type="search" placeholder="e.g., attention, LeetCode 704, RAG" />
-      </div>
+      <label>Week<select id="weekFilter"><option value="all">All weeks</option><option value="1">Week 1</option><option value="2">Week 2</option><option value="3">Week 3</option><option value="4">Week 4</option></select></label>
+      <label>Status<select id="statusFilter"><option value="all">All days</option><option value="incomplete">Incomplete</option><option value="complete">Complete</option></select></label>
+      <label class="control-search">Search tasks<input id="searchInput" type="search" placeholder="attention, LeetCode 704, RAG" /></label>
       <button id="expandAllBtn" class="button button--secondary">Expand all</button>
       <button id="collapseAllBtn" class="button button--secondary">Collapse all</button>
     </section>
 
     <section>
-      <div class="section-heading">
-        <div>
-          <p class="eyebrow">Daily schedule</p>
-          <h2>25-day plan</h2>
-        </div>
-        <p class="legend">R 60m · C 90m · Q 25m · I 60m · J 50m · LOG 15m</p>
-      </div>
+      <div class="section-heading"><div><p class="eyebrow">Daily schedule</p><h2>25-day plan</h2></div><p class="legend">R 60m - C 90m - Q 25m - I 60m - J 50m - LOG 15m</p></div>
       <div id="schedule" class="schedule"></div>
     </section>
 
-    <section class="job-section">
-      <div class="section-heading">
-        <div>
-          <p class="eyebrow">Rolling tracker</p>
-          <h2>Job applications</h2>
-        </div>
-        <button id="addJobBtn" class="button">Add application</button>
+    <section class="panel">
+      <div class="section-heading"><div><p class="eyebrow">Job Search Dashboard</p><h2>Application Kanban</h2></div><button id="addJobBtn" class="button">Add application</button></div>
+      <div id="kanban" class="kanban"></div>
+    </section>
+
+    <section class="panel">
+      <div class="section-heading"><div><p class="eyebrow">Interview Dashboard</p><h2>Interview History</h2></div><button id="addInterviewBtn" class="button">Add interview</button></div>
+      <div id="interviewList" class="interview-list"></div>
+    </section>
+
+    <section class="panel">
+      <div class="section-heading"><h2>Import / Export</h2></div>
+      <div class="toolbar">
+        <button id="exportJsonBtn" class="button">Export JSON</button>
+        <button id="exportCsvBtn" class="button button--secondary">Export CSV</button>
+        <button id="exportMarkdownBtn" class="button button--secondary">Export Markdown</button>
+        <label class="button button--secondary file-button">Import JSON<input id="importInput" type="file" accept="application/json" hidden /></label>
       </div>
-      <div class="table-wrap">
-        <table>
-          <thead>
-            <tr>
-              <th>Date</th>
-              <th>Company</th>
-              <th>Role</th>
-              <th>Source / Contact</th>
-              <th>Status</th>
-              <th>Next step</th>
-              <th aria-label="Actions"></th>
-            </tr>
-          </thead>
-          <tbody id="jobTableBody"></tbody>
-        </table>
-      </div>
-      <p id="emptyJobs" class="empty-state">No applications logged yet.</p>
     </section>
   </main>
 
-  <dialog id="jobDialog">
-    <form id="jobForm" method="dialog">
-      <div class="dialog-heading">
-        <h2 id="jobDialogTitle">Add application</h2>
-        <button id="closeJobDialog" type="button" class="icon-button" aria-label="Close">×</button>
-      </div>
-      <input id="jobId" type="hidden" />
-      <div class="form-grid">
-        <label>Date<input id="jobDate" type="date" required /></label>
-        <label>Company<input id="jobCompany" type="text" required /></label>
-        <label>Role<input id="jobRole" type="text" required /></label>
-        <label>Source / Contact<input id="jobSource" type="text" placeholder="LinkedIn, Lever, referral…" /></label>
-        <label>Status
-          <select id="jobStatus">
-            <option>Saved</option>
-            <option>Tailoring</option>
-            <option>Applied</option>
-            <option>Recruiter Contact</option>
-            <option>Assessment</option>
-            <option>Interview</option>
-            <option>Offer</option>
-            <option>Rejected</option>
-            <option>Closed</option>
-          </select>
-        </label>
-        <label>Next step<input id="jobNextStep" type="text" placeholder="Follow up on…" /></label>
-      </div>
-      <div class="dialog-actions">
-        <button type="button" id="cancelJobBtn" class="button button--secondary">Cancel</button>
-        <button type="submit" class="button">Save</button>
-      </div>
-    </form>
-  </dialog>
-
+  <dialog id="jobDialog"></dialog>
+  <dialog id="interviewDialog"></dialog>
   <template id="dayTemplate">
     <article class="day-card">
       <button class="day-card__summary" type="button" aria-expanded="false">
-        <span class="day-card__date"></span>
-        <span class="day-card__title-wrap">
-          <span class="day-card__title"></span>
-          <span class="day-card__meta"></span>
-        </span>
-        <span class="day-card__percent"></span>
-        <span class="day-card__chevron">⌄</span>
+        <span class="day-card__date"></span><span><span class="day-card__title"></span><span class="day-card__meta"></span></span><span class="day-card__percent"></span><span class="day-card__chevron">v</span>
       </button>
-      <div class="day-card__body" hidden>
-        <div class="day-progress progress"><span></span></div>
-        <div class="blocks"></div>
-        <label class="notes-label">Daily notes
-          <textarea class="day-notes" rows="3" placeholder="Mistakes, blockers, follow-ups, interview questions…"></textarea>
-        </label>
-      </div>
+      <div class="day-card__body" hidden><div class="day-progress progress"><span></span></div><div class="blocks"></div><label class="notes-label">Daily notes<textarea class="day-notes" rows="3"></textarea></label></div>
     </article>
   </template>
-
-  <script src="data.js"></script>
-  <script src="app.js"></script>
+  <div id="toastRoot" class="toast-root"></div>
+  <script type="module" src="js/app.js"></script>
 </body>
 </html>
