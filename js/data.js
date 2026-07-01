@@ -12,7 +12,7 @@ const day = (id, date, weekday, week, title, tasks) => ({ id, date, weekday, wee
 export const PLAN = [
   day(1,"2026-07-01","Wednesday",1,"Setup and ML Landscape",{
     R:["Hands-on ML: 01_the_machine_learning_landscape.ipynb","Review ML types, batch vs. online learning, instance vs. model-based learning, and generalization","MLJobSearch2025 questions 1–5"],
-    C:["Create repo folders: ml, llm, agents, system_design, leetcode, behavioral, job_search","Clone or bookmark all approved resources","Create Kaggle Titanic notebook and inspect shape, labels, missing values, and class balance","Commit day01_setup_and_eda"],
+    C:["Create repo folders: ml, llm, agents, system_design, leetcode, behavioral, job_search","Clone or bookmark all approved resources","Create Hands-on ML setup notebook and inspect the chapter datasets used by the repo","Commit day01_setup_and_eda"],
     Q:["Create 15 cards: learning types, classification vs. regression, parameters vs. hyperparameters, generalization, leakage, bias, variance"],
     I:["LeetCode 1 — Two Sum","Clarify inputs and edge cases","Derive brute force then hash-map solution","Explain time and space complexity aloud"],
     J:["Search LinkedIn for Applied Scientist, Research Scientist, AI Engineer, and ML Engineer","Save 10 roles","Tailor one résumé variant","Submit one application and log it"],
@@ -20,7 +20,7 @@ export const PLAN = [
   }),
   day(2,"2026-07-02","Thursday",1,"End-to-End ML Pipeline",{
     R:["Hands-on ML: 02_end_to_end_machine_learning_project.ipynb","Review train/test split, stratification, preprocessing pipelines, encoding, scaling, and cross-validation","Simplilearn questions 10–16"],
-    C:["Build Titanic numeric and categorical preprocessing pipelines","Combine with ColumnTransformer","Train logistic-regression baseline","Save accuracy, precision, recall, F1, and ROC-AUC","Commit day02_titanic_pipeline"],
+    C:["Build numeric and categorical preprocessing pipelines using the Hands-on ML repo examples","Combine with ColumnTransformer","Train logistic-regression baseline","Save accuracy, precision, recall, F1, and ROC-AUC","Commit day02_pipeline"],
     Q:["Review Day 1 cards","Add cards for stratification, leakage, imputation, one-hot encoding, scaling, grouped split, and time split"],
     I:["LeetCode 121 — Best Time to Buy and Sell Stock","Derive one-pass minimum-price invariant","Test increasing, decreasing, duplicate, and one-element inputs"],
     J:["Search Lever public postings","Review five AI/ML roles","Reject clear sponsorship, location, or seniority mismatches","Tailor and submit one application"],
@@ -40,11 +40,11 @@ export const PLAN = [
     Q:["Review all Week 1 cards","Mark easy, shaky, and failed","Rewrite failed cards","Reach at least 50 total cards"],
     I:["LeetCode 20 — Valid Parentheses","Explain stack invariant","Answer bias/variance, leakage, precision vs. recall, L1 vs. L2, and learning-rate failure aloud"],
     J:["Search YC Startup Job Board","Compare five AI startups","Submit one application","Save one founder or recruiter contact note"],
-    LOG:["Verify Titanic baseline, README, 50 cards, three LeetCode solutions, and four applications"]
+    LOG:["Verify ML baseline, README, 50 cards, three LeetCode solutions, and four applications"]
   }),
   day(5,"2026-07-05","Sunday",1,"Week 1 Review and Buffer",{
     R:["Re-read summaries from notebooks 01–04","Explain supervised learning, bias, variance, regularization, and leakage without notes","Re-answer MLJobSearch questions 1–15","Identify five weak concepts"],
-    C:["Finish one incomplete Week 1 task","Restart kernel and run Titanic notebook top to bottom","Fix broken imports, paths, and nondeterministic results","Push clean commit"],
+    C:["Finish one incomplete Week 1 task","Restart kernel and run Week 1 notebooks top to bottom","Fix broken imports, paths, and nondeterministic results","Push clean commit"],
     Q:["Review every due card","Repeat failed cards after ten minutes","Create no more than five new cards"],
     I:["Randomly redo LeetCode 1, 121, or 20 in 35 minutes","Answer five ML questions in 20 minutes","Score communication for five minutes"],
     J:["Review four submitted applications","Complete missing tracker fields","Shortlist six Week 2 roles","Prepare one résumé variant or catch up one application"],
@@ -52,7 +52,7 @@ export const PLAN = [
   }),
   day(6,"2026-07-06","Monday",2,"Decision Trees",{
     R:["Hands-on ML: 05_decision_trees.ipynb","Review CART, Gini, entropy, regularization, regression trees, and instability","Simplilearn questions 23–24 and MLJobSearch questions 46, 52, 117, 122"],
-    C:["Train unrestricted and regularized decision trees on Titanic","Compare train/validation gaps","Plot tree or feature importance","Add overfitting diagnosis section"],
+    C:["Train unrestricted and regularized decision trees using the Hands-on ML repo examples","Compare train/validation gaps","Plot tree or feature importance","Add overfitting diagnosis section"],
     Q:["Review due cards","Add cards for Gini, entropy, split selection, leaf prediction, pruning, variance, and scaling requirements"],
     I:["LeetCode 53 — Maximum Subarray","Derive brute force, prefix-sum, and Kadane solutions","State Kadane invariant","Test all-negative input"],
     J:["Review LinkedIn jobs posted in the previous 72 hours","Prioritize PyTorch, transformer, multimodal, conversational, and real-time ML roles","Submit one application"],
@@ -68,7 +68,7 @@ export const PLAN = [
   }),
   day(8,"2026-07-08","Wednesday",2,"Dimensionality Reduction",{
     R:["Hands-on ML: 07_dimensionality_reduction.ipynb","Review curse of dimensionality, PCA, explained variance, randomized PCA, and manifold learning","Simplilearn question 6 and 17; MLJobSearch questions 22, 75, 103"],
-    C:["Open Kaggle Digit Recognizer","Standardize pixels and fit PCA retaining 95% variance","Compare logistic-regression time and accuracy before and after PCA","Save explained-variance plot"],
+    C:["Use the Hands-on ML dimensionality-reduction notebook dataset","Standardize features and fit PCA retaining 95% variance","Compare logistic-regression time and accuracy before and after PCA","Save explained-variance plot"],
     Q:["Review due cards","Add cards for PCA objective, covariance, eigenvectors, explained variance, scaling, and interpretability loss"],
     I:["Draw five random MLJobSearch questions from 1–25","Answer each in 90 seconds","Add two follow-ups per question","Correct weak answers"],
     J:["Search YC startups using foundation models, multimodal models, agents, or real-time AI","Submit one application","Save one company-specific motivation sentence"],
@@ -76,7 +76,7 @@ export const PLAN = [
   }),
   day(9,"2026-07-09","Thursday",2,"Unsupervised Learning",{
     R:["Hands-on ML: 08_unsupervised_learning.ipynb","Review K-means, choosing K, silhouette score, GMM, anomaly detection, and limitations","MLJobSearch questions 61, 62, 99, 114, 137, 140"],
-    C:["Use a Kaggle customer-segmentation dataset","Standardize features","Compare K-means across K values","Calculate inertia and silhouette score","Fit GMM and visualize after PCA","Write five limitations"],
+    C:["Use the Hands-on ML unsupervised-learning notebook dataset","Standardize features","Compare K-means across K values","Calculate inertia and silhouette score","Fit GMM and visualize after PCA","Write five limitations"],
     Q:["Add cards for K-means objective, initialization, inertia, silhouette, GMM, EM, and cluster evaluation"],
     I:["LeetCode 238 — Product of Array Except Self","Implement prefix and suffix method","Optimize auxiliary space","Test zero cases"],
     J:["Search Wellfound for companies under 500 employees","Submit one application","Save one role with a manageable skills gap"],

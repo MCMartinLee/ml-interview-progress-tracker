@@ -1,22 +1,20 @@
 const RESOURCE_RULES = [
-  { pattern: /Hands-on ML/i, url: "https://github.com/ageron/handson-ml3" },
+  { pattern: /Hands-on ML/i, url: "https://github.com/ageron/handson-mlp" },
   { pattern: /LLMs-from-scratch/i, url: "https://github.com/rasbt/LLMs-from-scratch" },
   { pattern: /nanoChat/i, url: "https://github.com/karpathy/nanochat" },
   { pattern: /System-Design Primer/i, url: "https://github.com/donnemartin/system-design-primer" },
-  { pattern: /Data-Science-Interview-Q&A/i, url: "https://github.com/alexeygrigorev/data-science-interviews" },
-  { pattern: /MLJobSearch/i, url: "https://github.com/chiphuyen/ml-interviews-book" },
+  { pattern: /Data-Science-Interview-Q&A/i, url: "https://github.com/youssefHosni/Data-Science-Interview-Questions-Answers" },
+  { pattern: /MLJobSearch/i, url: "https://github.com/TidorP/MLJobSearch2025" },
   { pattern: /Simplilearn/i, url: "https://www.simplilearn.com/tutorials/machine-learning-tutorial/machine-learning-interview-questions" },
   { pattern: /LeetCode\s+(\d+)/i, url: match => `https://leetcode.com/problems/${LEETCODE_SLUGS[match[1]] || ""}` },
-  { pattern: /LinkedIn Learning/i, url: "https://www.linkedin.com/learning/" },
-  { pattern: /Microsoft lesson|Microsoft lessons/i, url: "https://learn.microsoft.com/en-us/training/" },
+  { pattern: /LinkedIn Learning/i, url: "https://www.linkedin.com/learning/agentic-ai-fundamentals-architectures-frameworks-and-applications/what-is-agentic-ai" },
+  { pattern: /Microsoft lesson|Microsoft lessons/i, url: "https://github.com/microsoft/ai-agents-for-beginners" },
+  { pattern: /behavior|STAR|Tell me about yourself|Why this role|Why this company|ownership|failure\/risk|collaboration\/conflict|ambiguity/i, url: "https://docs.google.com/document/d/e/2PACX-1vTG_14sE1SLYHCcjDmh8X3yFFIdlqTpo37MlJ-Tba_pHWDr5xgU4EAzC2tIxFEsKi2qLlhB1ssoBhFn/pub" },
   { pattern: /LinkedIn jobs|Search LinkedIn|Prioritize .* on LinkedIn/i, url: "https://www.linkedin.com/jobs/" },
   { pattern: /Lever/i, url: "https://jobs.lever.co/" },
   { pattern: /Wellfound/i, url: "https://wellfound.com/jobs" },
   { pattern: /YC Startup Job Board|YC board|YC startups/i, url: "https://www.ycombinator.com/jobs" },
-  { pattern: /GitHub Hiring-ML/i, url: "https://github.com/awesome-jobs/machine-learning-jobs" },
-  { pattern: /Kaggle Titanic/i, url: "https://www.kaggle.com/c/titanic" },
-  { pattern: /Kaggle Digit Recognizer/i, url: "https://www.kaggle.com/c/digit-recognizer" },
-  { pattern: /customer-segmentation dataset/i, url: "https://www.kaggle.com/datasets?search=customer+segmentation" }
+  { pattern: /GitHub Hiring-ML/i, url: "https://github.com/labuladong/fucking-algorithm/blob/master/job/hiring-ml.md" }
 ];
 
 const LEETCODE_SLUGS = {
@@ -44,4 +42,3 @@ export function getResourceUrl(task) {
   }
   return "";
 }
-
