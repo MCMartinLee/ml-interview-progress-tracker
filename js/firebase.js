@@ -1,6 +1,5 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
 import {
-  CACHE_SIZE_UNLIMITED,
   initializeFirestore,
   persistentLocalCache,
   persistentMultipleTabManager
@@ -14,7 +13,6 @@ export const app = configured ? initializeApp(firebaseConfig) : null;
 export const auth = app ? getAuth(app) : null;
 export const db = app
   ? initializeFirestore(app, {
-      cacheSizeBytes: CACHE_SIZE_UNLIMITED,
       localCache: persistentLocalCache({ tabManager: persistentMultipleTabManager() })
     })
   : null;
@@ -22,4 +20,3 @@ export const db = app
 export function isFirebaseConfigured() {
   return configured;
 }
-
