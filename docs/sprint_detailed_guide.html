@@ -1,0 +1,407 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>25-Day Sprint Detailed Guide</title>
+  <style>
+    :root {
+      color-scheme: light dark;
+      --bg: #f7f8fb;
+      --text: #172033;
+      --muted: #5d6a82;
+      --panel: #ffffff;
+      --border: #d9dfeb;
+      --accent: #3157d5;
+      --accent-soft: #e9eefc;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #101624;
+        --text: #edf2ff;
+        --muted: #aeb8cc;
+        --panel: #172033;
+        --border: #2d3950;
+        --accent-soft: #202f63;
+      }
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font: 16px/1.55 system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+    main { max-width: 1040px; margin: 0 auto; padding: 32px 18px 56px; }
+    header { margin-bottom: 24px; }
+    h1 { margin: 0 0 8px; font-size: clamp(2rem, 4vw, 3.25rem); line-height: 1.05; }
+    h2 { margin: 0 0 12px; font-size: 1.35rem; }
+    h3 { margin: 0 0 8px; font-size: 1.05rem; }
+    p { margin: 0 0 12px; }
+    a { color: var(--accent); }
+    code { background: var(--accent-soft); padding: 2px 5px; border-radius: 5px; }
+    .subtitle { max-width: 760px; color: var(--muted); font-size: 1.05rem; }
+    .nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 20px 0;
+    }
+    .nav a {
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 7px 10px;
+      background: var(--panel);
+      text-decoration: none;
+      font-weight: 700;
+    }
+    section, details {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      margin: 14px 0;
+      padding: 18px;
+    }
+    summary {
+      cursor: pointer;
+      font-weight: 800;
+      font-size: 1.08rem;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 12px;
+      margin-top: 14px;
+    }
+    .box {
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 14px;
+      background: color-mix(in srgb, var(--panel), var(--accent-soft) 24%);
+    }
+    ul { margin: 8px 0 0; padding-left: 20px; }
+    li { margin: 5px 0; }
+    .day { scroll-margin-top: 16px; }
+    .meta { color: var(--muted); font-weight: 700; margin-bottom: 8px; }
+  </style>
+</head>
+<body>
+  <main>
+    <header>
+      <h1>25-Day Sprint Detailed Guide</h1>
+      <p class="subtitle">Use this when the tracker checklist is too compressed. Each day below explains where to look, what to create, what “done” means, and what to record.</p>
+      <nav class="nav" aria-label="Guide navigation">
+        <a href="#how-to-use">How to use</a>
+        <a href="#week-1">Week 1 ML</a>
+        <a href="#week-2">Week 2 ML</a>
+        <a href="#week-3">Week 3 LLM</a>
+        <a href="#week-4">Week 4 Agents</a>
+        <a href="#templates">Templates</a>
+      </nav>
+    </header>
+
+    <section id="how-to-use">
+      <h2>How to Use This Guide</h2>
+      <p>For every tracker task, make one visible artifact: a notebook, markdown note, code file, solved problem, flashcard set, application log entry, or short reflection. If a resource link opens a repository, use the filename in the task as your anchor.</p>
+      <div class="grid">
+        <div class="box"><h3>Reading</h3><p>Read the named chapter or notebook, then write 5-8 bullets in your own words. Do not only watch or skim.</p></div>
+        <div class="box"><h3>Coding</h3><p>Create runnable files under <code>prep/</code>. A small working notebook beats a large unfinished one.</p></div>
+        <div class="box"><h3>Cards</h3><p>Create question-answer prompts in Anki, markdown, Notion, or a spreadsheet. Review old cards before making new ones.</p></div>
+        <div class="box"><h3>Log</h3><p>End each day with what shipped, what broke, what confused you, and the next blocker.</p></div>
+      </div>
+    </section>
+
+    <section>
+      <h2>Core Folder Meanings</h2>
+      <ul>
+        <li><code>prep/ml</code>: classical ML notebooks, notes, metrics, charts, and model comparisons.</li>
+        <li><code>prep/llm</code>: tokenization, attention, GPT components, training, and fine-tuning practice.</li>
+        <li><code>prep/agents</code>: tool use, RAG, memory, planning, guardrails, and job-fit agent code.</li>
+        <li><code>prep/system_design</code>: architecture docs, diagrams, estimates, and ML system design notes.</li>
+        <li><code>prep/leetcode</code>: problem solutions, tests, complexity notes, and repeated mistakes.</li>
+        <li><code>prep/behavioral</code>: intro pitch, STAR stories, ownership examples, and follow-up answers.</li>
+        <li><code>prep/job_search</code>: roles, resume variants, job descriptions, contacts, and application outcomes.</li>
+      </ul>
+    </section>
+
+    <section id="week-1">
+      <h2>Week 1: Classical ML Foundations</h2>
+      <details class="day" id="day-1" open>
+        <summary>Day 1: Setup and ML Landscape</summary>
+        <p class="meta">Primary source: Hands-On ML <code>01_the_machine_learning_landscape.ipynb</code> and Chapter 1 concepts.</p>
+        <ul>
+          <li>Read for: supervised, unsupervised, semisupervised, self-supervised, reinforcement learning, batch vs. online, instance-based vs. model-based, generalization, leakage, bias, variance.</li>
+          <li>Create <code>prep/resources.md</code> with links to Hands-On ML, LLMs-from-scratch, nanoChat, system-design-primer, Microsoft agents, job boards, and interview question resources.</li>
+          <li>Create the prep folder structure and a short README in each folder.</li>
+          <li>Create <code>prep/ml/notebooks/day01_setup_and_eda.ipynb</code>. EDA means exploratory data analysis: inspect shape, columns, missing values, examples, and summary statistics.</li>
+          <li>Create 15 cards using the prompts in <a href="day01_detailed_guide.md">the Day 1 markdown backup</a> or copy them into Anki.</li>
+          <li>Done means: folders exist, resources are saved, setup notebook opens, 15 cards exist, and the work is committed or logged.</li>
+        </ul>
+      </details>
+
+      <details class="day" id="day-2">
+        <summary>Day 2: End-to-End ML Pipeline</summary>
+        <ul>
+          <li>Read Hands-On ML <code>02_end_to_end_machine_learning_project.ipynb</code>. Focus on train/test split, stratified split, missing values, categorical encoding, scaling, pipelines, and cross-validation.</li>
+          <li>Build a notebook under <code>prep/ml/notebooks/day02_pipeline.ipynb</code> that creates numeric and categorical preprocessing with <code>Pipeline</code> and <code>ColumnTransformer</code>.</li>
+          <li>Train one simple baseline. If the task says logistic regression but the dataset is regression, use linear regression or logistic regression on a classification dataset and note the change.</li>
+          <li>Save a small metric table. Classification: accuracy, precision, recall, F1, ROC-AUC. Regression: MAE, RMSE, R2.</li>
+          <li>Cards: stratification, leakage, imputation, one-hot encoding, scaling, grouped split, time split.</li>
+          <li>Done means: the pipeline runs top to bottom and you can explain how leakage was avoided.</li>
+        </ul>
+      </details>
+
+      <details class="day" id="day-3">
+        <summary>Day 3: Classification and Evaluation</summary>
+        <ul>
+          <li>Read Hands-On ML <code>03_classification.ipynb</code>. Focus on confusion matrix, precision, recall, F1, threshold tuning, ROC, PR curve, multiclass, and error analysis.</li>
+          <li>Create <code>prep/ml/notebooks/day03_classification_metrics.ipynb</code> with dummy, logistic regression, and random forest models.</li>
+          <li>Plot or print confusion matrices, ROC curves, and PR curves. Change a decision threshold and record what improves and what gets worse.</li>
+          <li>Write 5 bullets explaining when to choose precision, recall, F1, ROC-AUC, or PR-AUC.</li>
+          <li>LeetCode: include the invariant for the sliding window solution, not just code.</li>
+          <li>Done means: you can explain false positives and false negatives using a concrete business example.</li>
+        </ul>
+      </details>
+
+      <details class="day" id="day-4">
+        <summary>Day 4: Linear Models and Week 1 Deliverable</summary>
+        <ul>
+          <li>Read Hands-On ML <code>04_training_linear_models.ipynb</code>. Focus on gradient descent, polynomial regression, regularization, logistic regression, and softmax.</li>
+          <li>Create <code>prep/ml/notebooks/day04_linear_models.ipynb</code>. Compare at least three regularization settings and plot validation performance.</li>
+          <li>Add a Week 1 README under <code>prep/ml/README.md</code> with links to notebooks, one result table, and 5 interview talking points.</li>
+          <li>Cards: gradient descent, learning rate, L1 vs. L2, regularization strength, softmax, logistic regression output.</li>
+          <li>Done means: Week 1 ML work is explainable without opening every notebook.</li>
+        </ul>
+      </details>
+
+      <details class="day" id="day-5">
+        <summary>Day 5: Week 1 Review and Buffer</summary>
+        <ul>
+          <li>Do not add lots of new work. Finish broken notebooks, rerun them from top to bottom, and fix imports or paths.</li>
+          <li>Closed-book explain: supervised learning, leakage, bias/variance, regularization, and model evaluation.</li>
+          <li>Review every due card and rewrite failed answers into shorter, sharper cards.</li>
+          <li>Redo one coding problem from Week 1 and record the mistake you are most likely to repeat.</li>
+          <li>Done means: Week 1 has a clean README, runnable notebooks, at least 50 total cards, and a written blocker list.</li>
+        </ul>
+      </details>
+    </section>
+
+    <section id="week-2">
+      <h2>Week 2: Trees, Ensembles, Unsupervised Learning, and PyTorch</h2>
+      <details class="day" id="day-6">
+        <summary>Day 6: Decision Trees</summary>
+        <ul>
+          <li>Read Hands-On ML <code>05_decision_trees.ipynb</code>. Focus on CART, Gini, entropy, tree depth, leaf constraints, regression trees, and instability.</li>
+          <li>Train one unrestricted tree and one regularized tree. Compare train vs. validation performance to show overfitting.</li>
+          <li>Save a tree plot or feature-importance chart, plus a short caveat about interpretability.</li>
+          <li>Done means: you can explain why trees overfit and which hyperparameters reduce it.</li>
+        </ul>
+      </details>
+      <details class="day" id="day-7">
+        <summary>Day 7: Ensembles</summary>
+        <ul>
+          <li>Read Hands-On ML <code>06_ensemble_learning_and_random_forests.ipynb</code>. Focus on voting, bagging, random forests, AdaBoost, gradient boosting, and stacking.</li>
+          <li>Use identical train/validation or cross-validation splits across models so the comparison is fair.</li>
+          <li>Create a model-comparison table and choose a champion model with one reason and one caveat.</li>
+          <li>Done means: you can explain bagging vs. boosting and why stacking can leak if built carelessly.</li>
+        </ul>
+      </details>
+      <details class="day" id="day-8">
+        <summary>Day 8: Dimensionality Reduction</summary>
+        <ul>
+          <li>Read Hands-On ML <code>07_dimensionality_reduction.ipynb</code>. Focus on curse of dimensionality, PCA, explained variance, randomized PCA, and manifold learning.</li>
+          <li>Standardize features before PCA. Fit PCA retaining 95% variance and plot cumulative explained variance.</li>
+          <li>Compare model speed and accuracy before and after PCA.</li>
+          <li>Done means: you can say when PCA helps and when it harms interpretability.</li>
+        </ul>
+      </details>
+      <details class="day" id="day-9">
+        <summary>Day 9: Unsupervised Learning</summary>
+        <ul>
+          <li>Read Hands-On ML <code>08_unsupervised_learning.ipynb</code>. Focus on K-means, inertia, silhouette score, GMM, anomaly detection, and limitations.</li>
+          <li>Compare several values of K. Record inertia and silhouette score rather than trusting one plot.</li>
+          <li>Fit a GMM and visualize clusters after PCA if the feature dimension is high.</li>
+          <li>Done means: you can explain why unsupervised evaluation is less direct than supervised evaluation.</li>
+        </ul>
+      </details>
+      <details class="day" id="day-10">
+        <summary>Day 10: Artificial Neural Networks</summary>
+        <ul>
+          <li>Read Hands-On ML <code>09_artificial_neural_networks.ipynb</code>. Focus on perceptrons, MLPs, activations, output layers, losses, and backpropagation.</li>
+          <li>Implement a small two-layer PyTorch MLP with shape assertions and train/validation loss logging.</li>
+          <li>Compare ReLU and sigmoid behavior. Note vanishing gradients and dying ReLUs.</li>
+          <li>Done means: your model trains and you can explain input shape, output shape, loss, and optimizer.</li>
+        </ul>
+      </details>
+      <details class="day" id="day-11">
+        <summary>Day 11: PyTorch and Week 2 Deliverable</summary>
+        <ul>
+          <li>Read Hands-On ML <code>10_neural_nets_with_pytorch.ipynb</code> and skim <code>11_training_deep_neural_networks.ipynb</code>.</li>
+          <li>Create reusable PyTorch functions: dataset/dataloader, <code>train_one_epoch</code>, <code>evaluate</code>, checkpoint save/load, early stopping, seed setting.</li>
+          <li>Add a README usage example that shows how to run training.</li>
+          <li>Done means: Week 2 has a reproducible training loop and at least 100 cumulative cards.</li>
+        </ul>
+      </details>
+      <details class="day" id="day-12">
+        <summary>Day 12: Week 2 Review and Buffer</summary>
+        <ul>
+          <li>Rerun all classical ML notebooks and the PyTorch loop. Fix nondeterminism and broken paths.</li>
+          <li>Explain trees, forests, boosting, PCA, K-means, GMM, MLPs, and backpropagation without notes.</li>
+          <li>Run a 20-card random recall test and rewrite answers longer than four sentences.</li>
+          <li>Done means: your Week 2 artifacts are runnable and your weakest three ML topics are named.</li>
+        </ul>
+      </details>
+    </section>
+
+    <section id="week-3">
+      <h2>Week 3: LLM Fundamentals</h2>
+      <details class="day" id="day-13">
+        <summary>Day 13: Tokenization and Data Loading</summary>
+        <ul>
+          <li>Read LLMs-from-scratch Chapter 2. Focus on tokenization, vocabulary, token IDs, sliding windows, embeddings, positions, and next-token targets.</li>
+          <li>Build a tiny corpus and print input/target windows. Verify that the target is shifted by one token.</li>
+          <li>Done means: you can explain how raw text becomes training examples.</li>
+        </ul>
+      </details>
+      <details class="day" id="day-14">
+        <summary>Day 14: Attention</summary>
+        <ul>
+          <li>Read Chapter 3. Focus on Q/K/V, scaled dot-product attention, causal masks, padding masks, dropout, and multi-head attention.</li>
+          <li>Implement single-head attention, then multi-head attention. Print tensor shapes at each step.</li>
+          <li>Test that future tokens receive zero attention after applying a causal mask.</li>
+          <li>Done means: you can draw the attention shape flow from memory.</li>
+        </ul>
+      </details>
+      <details class="day" id="day-15">
+        <summary>Day 15: GPT Architecture</summary>
+        <ul>
+          <li>Read Chapter 4. Focus on transformer blocks, residual paths, layer norm, FFN, token embeddings, positional embeddings, parameter count, and generation.</li>
+          <li>Run a forward pass on dummy IDs and verify output shape: batch, sequence length, vocabulary size.</li>
+          <li>Implement greedy generation and write down where temperature or top-k would fit.</li>
+          <li>Done means: you can trace token IDs to logits and generated tokens.</li>
+        </ul>
+      </details>
+      <details class="day" id="day-16">
+        <summary>Day 16: Pretraining and nanoChat</summary>
+        <ul>
+          <li>Read Chapter 5 and inspect nanoChat README, tokenizer, GPT model, and training pipeline.</li>
+          <li>Run a tiny controlled training job or inspect the code path if compute is limited. Record train loss, validation loss, checkpoint behavior, and one generated sample.</li>
+          <li>Create a pipeline diagram from raw text to tokenizer to batches to model to checkpoint to generation.</li>
+          <li>Done means: you can explain next-token cross-entropy and validation loss.</li>
+        </ul>
+      </details>
+      <details class="day" id="day-17">
+        <summary>Day 17: Fine-Tuning and Research Deep Dive</summary>
+        <ul>
+          <li>Read Chapter 6. Compare feature extraction, partial fine-tuning, full fine-tuning, freezing, and output-head replacement.</li>
+          <li>Run reduced classification fine-tuning or trace the notebook with small data. Count trainable parameters before and after freezing.</li>
+          <li>Record overfitting risks and three deep-dive questions you would ask in an interview.</li>
+          <li>Done means: you can distinguish pretraining, classification fine-tuning, and feature extraction.</li>
+        </ul>
+      </details>
+      <details class="day" id="day-18">
+        <summary>Day 18: Instruction Fine-Tuning and Week 3 Deliverable</summary>
+        <ul>
+          <li>Read Chapter 7. Focus on instruction formatting, masks, SFT datasets, evaluation, inference, and chat templates.</li>
+          <li>Format five instruction examples and build or inspect an instruction dataset loader.</li>
+          <li>Add tests for tensor shapes, causal masking, and generation termination.</li>
+          <li>Done means: Week 3 has an LLM README, 150 cumulative cards, and a clear story from tokenization to SFT.</li>
+        </ul>
+      </details>
+      <details class="day" id="day-19">
+        <summary>Day 19: Week 3 Review and Buffer</summary>
+        <ul>
+          <li>Run LLM tests, verify causal masking and shapes, reload a checkpoint, and generate a small sample.</li>
+          <li>Explain tokenizer to logits to loss to generation without notes.</li>
+          <li>Move failed cards into a Top 20 Before Interview deck.</li>
+          <li>Done means: your LLM weak areas are explicit and your code path is rerunnable.</li>
+        </ul>
+      </details>
+    </section>
+
+    <section id="week-4">
+      <h2>Week 4: Agents, RAG, Memory, and ML System Design</h2>
+      <details class="day" id="day-20">
+        <summary>Day 20: Agent Fundamentals and Tool Use</summary>
+        <ul>
+          <li>Read the Microsoft agent intro, frameworks, design patterns, and tool-use lessons. Focus on goal, state, observation, action, tool, policy, utility, and guardrails.</li>
+          <li>Create <code>prep/agents/job_fit_agent</code> with mock resume, job-description, skill-extraction, and overlap tools.</li>
+          <li>Use deterministic routing first. Avoid adding an LLM until the workflow is testable.</li>
+          <li>Done means: three test job descriptions produce predictable outputs.</li>
+        </ul>
+      </details>
+      <details class="day" id="day-21">
+        <summary>Day 21: Agentic RAG</summary>
+        <ul>
+          <li>Read the Microsoft Agentic RAG lesson. Focus on query planning, retrieval, grounding, tool selection, response generation, and evaluation.</li>
+          <li>Store five job descriptions, chunk responsibilities and qualifications, and implement simple retrieval.</li>
+          <li>Output matched skills, missing skills, evidence snippets, and resume suggestions with sources.</li>
+          <li>Done means: every recommendation links back to retrieved evidence.</li>
+        </ul>
+      </details>
+      <details class="day" id="day-22">
+        <summary>Day 22: Trust, Planning, and Multi-Agent Patterns</summary>
+        <ul>
+          <li>Read trustworthy agents, planning, multi-agent, and metacognition lessons. Focus on human approval, planner/executor/evaluator separation, max steps, and failure modes.</li>
+          <li>Add planner, executor, and evaluator steps to the job-fit agent.</li>
+          <li>Require human approval before generating resume replacement text and test tool failures or repeated loops.</li>
+          <li>Done means: the agent has limits, approval points, and tests for bad inputs.</li>
+        </ul>
+      </details>
+      <details class="day" id="day-23">
+        <summary>Day 23: Protocols, Context, and Memory</summary>
+        <ul>
+          <li>Read Microsoft lessons on protocols, context engineering, and memory. Focus on MCP, A2A, context budgets, short-term memory, long-term memory, contamination, and compression.</li>
+          <li>Define a context schema separating profile, current job, evidence, and temporary state.</li>
+          <li>Add a length budget, summary memory, reset command, and tests preventing cross-company contamination.</li>
+          <li>Done means: memory cannot leak one company's details into another company's answer.</li>
+        </ul>
+      </details>
+      <details class="day" id="day-24">
+        <summary>Day 24: ML System Design</summary>
+        <ul>
+          <li>Read system-design-primer sections on latency, throughput, availability, consistency, replication, sharding, caches, queues, and estimates.</li>
+          <li>Create <code>prep/system_design/realtime_ml_inference.md</code> with use case, constraints, API, online path, batch path, preprocessing, model service, cache, queue, monitoring, versioning, rollback, failure modes, latency budget, and capacity estimates.</li>
+          <li>Draw an architecture diagram. A simple Mermaid diagram is enough.</li>
+          <li>Done means: you can explain online inference vs. batch jobs and where drift monitoring fits.</li>
+        </ul>
+      </details>
+      <details class="day" id="day-25">
+        <summary>Day 25: Final Integration and Deliverable</summary>
+        <ul>
+          <li>Run all notebooks top to bottom, remove large outputs and secrets, and make sure README links work.</li>
+          <li>Create a root README linking ML, LLM, agent, system-design, LeetCode, behavioral, and job-search artifacts.</li>
+          <li>Add result tables, screenshots, talking points, limitations, and next steps.</li>
+          <li>Run closed-book recall: 10 ML, 10 LLM, and 10 agent/system cards. Score immediate, partial, or failed.</li>
+          <li>Done means: someone reviewing your prep repo can see what you built, what you learned, and what you would discuss in interviews.</li>
+        </ul>
+      </details>
+    </section>
+
+    <section id="templates">
+      <h2>Reusable Templates</h2>
+      <div class="grid">
+        <div class="box">
+          <h3>Flashcard</h3>
+          <p><code>Q:</code> What is the concept?</p>
+          <p><code>A:</code> One to three sentences, plus one example if useful.</p>
+        </div>
+        <div class="box">
+          <h3>Daily Log</h3>
+          <p>Finished: files, cards, problems, applications.</p>
+          <p>Confusing: one concrete question.</p>
+          <p>Tomorrow: first action and blocker.</p>
+        </div>
+        <div class="box">
+          <h3>LeetCode Note</h3>
+          <p>Problem, pattern, invariant, edge cases, complexity, mistake to avoid.</p>
+        </div>
+        <div class="box">
+          <h3>Project README</h3>
+          <p>Goal, setup, files, result table, screenshots, limitations, interview talking points.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+</body>
+</html>
