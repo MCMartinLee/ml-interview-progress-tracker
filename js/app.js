@@ -37,6 +37,7 @@ const KANBAN = KANBAN_COLUMNS;
 let user = null;
 let progress = { checks: {}, notes: {}, openDays: [] };
 let deferredInstallPrompt = null;
+let applicationView = "table";
 
 const $ = selector => document.querySelector(selector);
 
@@ -46,6 +47,9 @@ $("#loginBtn").addEventListener("click", loginWithGoogle);
 $("#logoutBtn").addEventListener("click", logout);
 $("#themeBtn").addEventListener("click", toggleTheme);
 $("#addJobBtn").addEventListener("click", () => openJobDialog());
+$("#applicationsTableTab").addEventListener("click", () => setApplicationView("table"));
+$("#applicationsKanbanTab").addEventListener("click", () => setApplicationView("kanban"));
+["#applicationSearchInput", "#applicationStatusFilter", "#applicationCompanyFilter", "#applicationSort"].forEach(selector => $(selector).addEventListener("input", renderApplications));
 $("#addInterviewBtn").addEventListener("click", () => openInterviewDialog());
 $("#exportJsonBtn").addEventListener("click", exportJSON);
 $("#exportCsvBtn").addEventListener("click", exportCSV);
@@ -92,7 +96,7 @@ watchAuth(async authUser => {
 function renderAll() {
   renderSchedule();
   renderDashboard();
-  renderKanban();
+  renderApplications();
   renderInterviews();
   setupToday();
 }
@@ -226,6 +230,100 @@ function renderHeatmap(stats) {
   });
 }
 
+function renderApplications() {
+  renderApplicationFilters();
+  const tableActive = applicationView === "table";
+  $("#applicationsTableView").hidden = !tableActive;
+  $("#kanban").hidden = tableActive;
+  $("#applicationsTableTab").classList.toggle("is-active", tableActive);
+  $("#applicationsKanbanTab").classList.toggle("is-active", !tableActive);
+  renderApplicationsTable();
+  renderKanban();
+}
+
+function setApplicationView(view) {
+  applicationView = view;
+  renderApplications();
+}
+
+function renderApplicationFilters() {
+  const select = $("#applicationCompanyFilter");
+  const current = select.value;
+  const companies = [...new Set(cloudState.applications.map(item => item.company).filter(Boolean))].sort((a, b) => a.localeCompare(b));
+  select.innerHTML = '<option value="all">All companies</option>' + companies.map(company => `<option value="${escapeHTML(company)}">${escapeHTML(company)}</option>`).join("");
+  select.value = companies.includes(current) ? current : "all";
+}
+
+function getFilteredApplications() {
+  const query = $("#applicationSearchInput").value.trim().toLowerCase();
+  const status = $("#applicationStatusFilter").value;
+  const company = $("#applicationCompanyFilter").value;
+  const sort = $("#applicationSort").value;
+  return cloudState.applications
+    .filter(item => {
+      const haystack = `${item.company || ""} ${item.role || ""} ${item.notes || ""} ${item.salary || ""}`.toLowerCase();
+      return (!query || haystack.includes(query))
+        && (status === "all" || normalizeStatus(item.status) === status)
+        && (company === "all" || item.company === company);
+    })
+    .sort((a, b) => compareApplications(a, b, sort));
+}
+
+function compareApplications(a, b, sort) {
+  if (sort === "company-asc") return `${a.company || ""} ${a.role || ""}`.localeCompare(`${b.company || ""} ${b.role || ""}`);
+  if (sort === "status-asc") return `${normalizeStatus(a.status)} ${a.company || ""}`.localeCompare(`${normalizeStatus(b.status)} ${b.company || ""}`);
+  const delta = sortableApplicationDate(a.appliedDate) - sortableApplicationDate(b.appliedDate);
+  return sort === "date-asc" ? delta : -delta;
+}
+
+function sortableApplicationDate(value = "") {
+  const text = String(value).trim();
+  if (!text) return 0;
+  if (/^\d{4}-\d{1,2}-\d{1,2}$/.test(text)) return new Date(text).getTime();
+  const match = text.match(/^(\d{1,2})\/(\d{1,2})(?:\/(\d{2,4}))?$/);
+  if (!match) return 0;
+  const month = Number(match[1]);
+  const day = Number(match[2]);
+  const year = match[3] ? Number(match[3].length === 2 ? `20${match[3]}` : match[3]) : inferApplicationYear(month);
+  return new Date(year, month - 1, day).getTime();
+}
+
+function inferApplicationYear(month) {
+  const today = new Date();
+  const currentMonth = today.getMonth() + 1;
+  return month > currentMonth ? today.getFullYear() - 1 : today.getFullYear();
+}
+
+function renderApplicationsTable() {
+  const body = $("#applicationsTableBody");
+  const applications = getFilteredApplications();
+  body.innerHTML = "";
+  if (!applications.length) {
+    body.innerHTML = '<tr><td colspan="7" class="empty-state">No applications match the current filters.</td></tr>';
+    return;
+  }
+  applications.forEach(application => body.appendChild(renderApplicationRow(application)));
+}
+
+function renderApplicationRow(application) {
+  const row = document.createElement("tr");
+  const source = application.source
+    ? `<a class="resource-link" href="${escapeHTML(application.source)}" target="_blank" rel="noopener noreferrer">Open</a>`
+    : "";
+  row.innerHTML = `
+    <td><strong>${escapeHTML(application.company || "Untitled company")}</strong></td>
+    <td><span>${escapeHTML(application.role || "")}</span>${application.notes ? `<small>${escapeHTML(application.notes)}</small>` : ""}</td>
+    <td><span class="status-pill">${escapeHTML(normalizeStatus(application.status))}</span></td>
+    <td>${escapeHTML(application.appliedDate || "")}</td>
+    <td>${escapeHTML(application.salary || "")}</td>
+    <td>${source}</td>
+    <td><div class="card-actions"><button class="icon-button">Edit</button><button class="icon-button">Delete</button></div></td>
+  `;
+  row.querySelectorAll("button")[0].addEventListener("click", () => openJobDialog(application));
+  row.querySelectorAll("button")[1].addEventListener("click", () => confirm("Delete this application?") && deleteApplication(application.id));
+  return row;
+}
+
 function renderKanban() {
   const root = $("#kanban");
   root.innerHTML = "";
@@ -241,7 +339,7 @@ function renderKanban() {
       const app = cloudState.applications.find(item => item.id === id);
       if (app) upsertApplication({ ...app, status });
     });
-    cloudState.applications.filter(item => normalizeStatus(item.status) === status).forEach(item => column.appendChild(renderJobCard(item)));
+    getFilteredApplications().filter(item => normalizeStatus(item.status) === status).forEach(item => column.appendChild(renderJobCard(item)));
     root.appendChild(column);
   });
 }

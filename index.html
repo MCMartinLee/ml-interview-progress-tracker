@@ -80,8 +80,27 @@
     </section>
 
     <section class="panel">
-      <div class="section-heading"><div><p class="eyebrow">Job Search Dashboard</p><h2>Application Kanban</h2></div><button id="addJobBtn" class="button">Add application</button></div>
-      <div id="kanban" class="kanban"></div>
+      <div class="section-heading">
+        <div><p class="eyebrow">Job Search Dashboard</p><h2>Applications</h2></div>
+        <button id="addJobBtn" class="button">Add application</button>
+      </div>
+      <div class="app-view-tabs" role="tablist" aria-label="Application views">
+        <button id="applicationsTableTab" class="tab-button is-active" type="button">Table</button>
+        <button id="applicationsKanbanTab" class="tab-button" type="button">Kanban</button>
+      </div>
+      <div class="application-controls">
+        <label class="control-search">Search applications<input id="applicationSearchInput" type="search" placeholder="company, role, notes" /></label>
+        <label>Status<select id="applicationStatusFilter"><option value="all">All statuses</option><option>Saved</option><option>Applied</option><option>Recruiter</option><option>OA</option><option>Interview</option><option>Offer</option><option>Rejected</option></select></label>
+        <label>Company<select id="applicationCompanyFilter"><option value="all">All companies</option></select></label>
+        <label>Sort<select id="applicationSort"><option value="date-desc">Latest applied</option><option value="date-asc">Oldest applied</option><option value="company-asc">Company A-Z</option><option value="status-asc">Status</option></select></label>
+      </div>
+      <div id="applicationsTableView" class="application-table-wrap">
+        <table class="application-table">
+          <thead><tr><th>Company</th><th>Role</th><th>Status</th><th>Applied</th><th>Salary</th><th>Source</th><th>Actions</th></tr></thead>
+          <tbody id="applicationsTableBody"></tbody>
+        </table>
+      </div>
+      <div id="kanban" class="kanban" hidden></div>
     </section>
 
     <section class="panel">

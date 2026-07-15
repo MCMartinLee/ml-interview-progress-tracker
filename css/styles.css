@@ -106,6 +106,10 @@ input:focus, select:focus, textarea:focus { outline: 3px solid color-mix(in srgb
 .button--danger { background: var(--danger); color: white; }
 .toolbar { display: flex; flex-wrap: wrap; gap: 10px; }
 .legend { margin: 0; color: var(--muted); }
+.app-view-tabs { display: inline-flex; gap: 4px; margin-bottom: 14px; padding: 4px; border: 1px solid var(--border); border-radius: 8px; background: var(--surface-2); }
+.tab-button { border: 0; border-radius: 6px; padding: 8px 12px; color: var(--muted); background: transparent; font-weight: 850; }
+.tab-button.is-active { color: white; background: var(--primary); }
+.application-controls { display: grid; grid-template-columns: minmax(240px, 1fr) repeat(3, minmax(150px, 190px)); gap: 12px; margin-bottom: 14px; align-items: end; }
 
 .schedule { display: grid; gap: 12px; }
 .day-card { border-radius: 8px; overflow: hidden; scroll-margin-top: 12px; }
@@ -133,6 +137,13 @@ input:focus, select:focus, textarea:focus { outline: 3px solid color-mix(in srgb
 .kanban { display: grid; grid-template-columns: repeat(7, minmax(190px, 1fr)); gap: 12px; overflow-x: auto; padding-bottom: 4px; }
 .kanban-column { min-height: 220px; border: 1px dashed var(--border); border-radius: 8px; padding: 10px; background: var(--surface-2); }
 .kanban-column h3 { margin: 0 0 10px; font-size: .92rem; }
+.application-table-wrap { max-height: 680px; overflow: auto; border: 1px solid var(--border); border-radius: 8px; }
+.application-table { width: 100%; border-collapse: collapse; min-width: 980px; }
+.application-table th, .application-table td { padding: 10px 12px; border-bottom: 1px solid var(--border); text-align: left; vertical-align: top; }
+.application-table th { position: sticky; top: 0; z-index: 1; color: var(--muted); background: var(--surface-2); font-size: .78rem; text-transform: uppercase; letter-spacing: .08em; }
+.application-table tbody tr:hover { background: color-mix(in srgb, var(--surface-2) 65%, transparent); }
+.application-table small { display: block; margin-top: 4px; color: var(--muted); max-width: 460px; }
+.status-pill { display: inline-flex; align-items: center; min-height: 26px; border-radius: 999px; padding: 3px 9px; color: var(--primary); background: color-mix(in srgb, var(--primary) 12%, transparent); font-weight: 850; white-space: nowrap; }
 .job-card, .interview-card { border: 1px solid var(--border); border-radius: 8px; padding: 11px; background: var(--surface); box-shadow: 0 4px 12px rgba(20, 34, 67, .06); }
 .job-card { margin-bottom: 9px; cursor: grab; }
 .job-card strong, .interview-card strong { display: block; }
@@ -171,5 +182,6 @@ dialog::backdrop { background: rgba(10, 16, 30, .58); }
   .day-card__summary { grid-template-columns: 1fr 56px 20px; }
   .day-card__date { grid-column: 1 / -1; color: var(--muted); font-size: .82rem; }
   .form-grid { grid-template-columns: 1fr; }
+  .application-controls { grid-template-columns: 1fr; }
   .controls > *, .today-panel > * { width: 100%; }
 }
