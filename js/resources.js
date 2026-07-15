@@ -1,4 +1,5 @@
 const RESOURCE_RULES = [
+  { pattern: /docs\/day01_detailed_guide\.md/i, url: "docs/day01_detailed_guide.md" },
   { pattern: /Hands-on ML/i, url: "https://github.com/ageron/handson-mlp" },
   { pattern: /LLMs-from-scratch/i, url: "https://github.com/rasbt/LLMs-from-scratch" },
   { pattern: /nanoChat/i, url: "https://github.com/karpathy/nanochat" },
