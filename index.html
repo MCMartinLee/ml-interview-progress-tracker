@@ -84,10 +84,6 @@
         <div><p class="eyebrow">Job Search Dashboard</p><h2>Applications</h2></div>
         <button id="addJobBtn" class="button">Add application</button>
       </div>
-      <div class="app-view-tabs" role="tablist" aria-label="Application views">
-        <button id="applicationsTableTab" class="tab-button is-active" type="button">Table</button>
-        <button id="applicationsKanbanTab" class="tab-button" type="button">Kanban</button>
-      </div>
       <div class="application-controls">
         <label class="control-search">Search applications<input id="applicationSearchInput" type="search" placeholder="company, role, notes" /></label>
         <label>Status<select id="applicationStatusFilter"><option value="all">All statuses</option><option>Saved</option><option>Applied</option><option>Recruiter</option><option>OA</option><option>Interview</option><option>Offer</option><option>Rejected</option></select></label>
@@ -100,7 +96,6 @@
           <tbody id="applicationsTableBody"></tbody>
         </table>
       </div>
-      <div id="kanban" class="kanban" hidden></div>
     </section>
 
     <section class="panel">

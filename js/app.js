@@ -37,7 +37,6 @@ const KANBAN = KANBAN_COLUMNS;
 let user = null;
 let progress = { checks: {}, notes: {}, openDays: [] };
 let deferredInstallPrompt = null;
-let applicationView = "table";
 
 const $ = selector => document.querySelector(selector);
 
@@ -47,8 +46,6 @@ $("#loginBtn").addEventListener("click", loginWithGoogle);
 $("#logoutBtn").addEventListener("click", logout);
 $("#themeBtn").addEventListener("click", toggleTheme);
 $("#addJobBtn").addEventListener("click", () => openJobDialog());
-$("#applicationsTableTab").addEventListener("click", () => setApplicationView("table"));
-$("#applicationsKanbanTab").addEventListener("click", () => setApplicationView("kanban"));
 ["#applicationSearchInput", "#applicationStatusFilter", "#applicationCompanyFilter", "#applicationSort"].forEach(selector => $(selector).addEventListener("input", renderApplications));
 $("#addInterviewBtn").addEventListener("click", () => openInterviewDialog());
 $("#exportJsonBtn").addEventListener("click", exportJSON);
@@ -232,18 +229,7 @@ function renderHeatmap(stats) {
 
 function renderApplications() {
   renderApplicationFilters();
-  const tableActive = applicationView === "table";
-  $("#applicationsTableView").hidden = !tableActive;
-  $("#kanban").hidden = tableActive;
-  $("#applicationsTableTab").classList.toggle("is-active", tableActive);
-  $("#applicationsKanbanTab").classList.toggle("is-active", !tableActive);
   renderApplicationsTable();
-  renderKanban();
-}
-
-function setApplicationView(view) {
-  applicationView = view;
-  renderApplications();
 }
 
 function renderApplicationFilters() {
@@ -322,37 +308,6 @@ function renderApplicationRow(application) {
   row.querySelectorAll("button")[0].addEventListener("click", () => openJobDialog(application));
   row.querySelectorAll("button")[1].addEventListener("click", () => confirm("Delete this application?") && deleteApplication(application.id));
   return row;
-}
-
-function renderKanban() {
-  const root = $("#kanban");
-  root.innerHTML = "";
-  KANBAN.forEach(status => {
-    const column = document.createElement("section");
-    column.className = "kanban-column";
-    column.dataset.status = status;
-    column.innerHTML = `<h3>${status}</h3>`;
-    column.addEventListener("dragover", event => event.preventDefault());
-    column.addEventListener("drop", event => {
-      event.preventDefault();
-      const id = event.dataTransfer.getData("text/plain");
-      const app = cloudState.applications.find(item => item.id === id);
-      if (app) upsertApplication({ ...app, status });
-    });
-    getFilteredApplications().filter(item => normalizeStatus(item.status) === status).forEach(item => column.appendChild(renderJobCard(item)));
-    root.appendChild(column);
-  });
-}
-
-function renderJobCard(application) {
-  const card = document.createElement("article");
-  card.className = "job-card";
-  card.draggable = Boolean(user);
-  card.addEventListener("dragstart", event => event.dataTransfer.setData("text/plain", application.id));
-  card.innerHTML = `<strong>${escapeHTML(application.company || "Untitled company")}</strong><span>${escapeHTML(application.role || "")}</span><small>${escapeHTML(application.appliedDate || "")} ${escapeHTML(application.location || "")}</small><div class="card-actions"><button class="icon-button">Edit</button><button class="icon-button">Delete</button></div>`;
-  card.querySelectorAll("button")[0].addEventListener("click", () => openJobDialog(application));
-  card.querySelectorAll("button")[1].addEventListener("click", () => confirm("Delete this application?") && deleteApplication(application.id));
-  return card;
 }
 
 function renderInterviews() {
