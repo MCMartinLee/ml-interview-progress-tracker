@@ -340,6 +340,17 @@ function openJobDialog(application = {}) {
     ${field("Location", "location", application.location)}
     ${field("Notes", "notes", application.notes, "", "textarea full")}
   </div><div class="dialog-actions"><button type="button" class="button button--secondary">Cancel</button><button class="button" type="submit">Save</button></div></form>`;
+  populateForm(dialog.querySelector("form"), {
+    company: application.company,
+    role: application.role,
+    source: application.source,
+    status: normalizeStatus(application.status),
+    appliedDate: application.appliedDate || application.date,
+    nextStep: application.nextStep,
+    salary: application.salary,
+    location: application.location,
+    notes: application.notes
+  });
   dialog.querySelector(".icon-button").addEventListener("click", () => dialog.close());
   dialog.querySelector(".button--secondary").addEventListener("click", () => dialog.close());
   dialog.querySelector("form").addEventListener("submit", event => {
@@ -480,6 +491,13 @@ function selectField(label, name, value) {
 
 function formData(form) {
   return Object.fromEntries(new FormData(form).entries());
+}
+
+function populateForm(form, values) {
+  Object.entries(values).forEach(([name, value]) => {
+    const control = form.elements[name];
+    if (control) control.value = value ?? "";
+  });
 }
 
 function renderTaskText(task, resourceUrl) {
