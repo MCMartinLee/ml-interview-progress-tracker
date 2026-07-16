@@ -265,7 +265,8 @@ function compareApplications(a, b, sort) {
 function sortableApplicationDate(value = "") {
   const text = String(value).trim();
   if (!text) return 0;
-  if (/^\d{4}-\d{1,2}-\d{1,2}$/.test(text)) return new Date(text).getTime();
+  const dateInputValue = toDateInputValue(text);
+  if (dateInputValue) return new Date(dateInputValue).getTime();
   const match = text.match(/^(\d{1,2})\/(\d{1,2})(?:\/(\d{2,4}))?$/);
   if (!match) return 0;
   const month = Number(match[1]);
@@ -329,12 +330,13 @@ function renderInterviews() {
 
 function openJobDialog(application = {}) {
   const dialog = $("#jobDialog");
+  const appliedDate = toDateInputValue(application.appliedDate || application.date);
   dialog.innerHTML = `<form class="dialog-form" method="dialog"><div class="dialog-heading"><h2>${application.id ? "Edit" : "Add"} application</h2><button class="icon-button" value="cancel" type="button">Close</button></div><div class="form-grid">
     ${field("Company", "company", application.company, "required")}
     ${field("Role", "role", application.role, "required")}
     ${field("Source", "source", application.source)}
     ${selectField("Status", "status", normalizeStatus(application.status))}
-    ${field("Applied Date", "appliedDate", application.appliedDate || application.date, "", "date")}
+    ${field("Applied Date", "appliedDate", appliedDate, "", "date")}
     ${field("Next Step", "nextStep", application.nextStep)}
     ${field("Salary", "salary", application.salary)}
     ${field("Location", "location", application.location)}
@@ -345,7 +347,7 @@ function openJobDialog(application = {}) {
     role: application.role,
     source: application.source,
     status: normalizeStatus(application.status),
-    appliedDate: application.appliedDate || application.date,
+    appliedDate,
     nextStep: application.nextStep,
     salary: application.salary,
     location: application.location,
@@ -498,6 +500,28 @@ function populateForm(form, values) {
     const control = form.elements[name];
     if (control) control.value = value ?? "";
   });
+}
+
+function toDateInputValue(value = "") {
+  const text = String(value).trim();
+  if (!text) return "";
+
+  const iso = text.match(/^(\d{4})-(\d{1,2})-(\d{1,2})$/);
+  if (iso) return formatDateParts(iso[1], iso[2], iso[3]);
+
+  const slash = text.match(/^(\d{1,2})\/(\d{1,2})(?:\/(\d{2,4}))?$/);
+  if (slash) {
+    const month = Number(slash[1]);
+    const year = slash[3] ? Number(slash[3].length === 2 ? `20${slash[3]}` : slash[3]) : inferApplicationYear(month);
+    return formatDateParts(year, month, slash[2]);
+  }
+
+  const parsed = new Date(text);
+  return Number.isNaN(parsed.getTime()) ? "" : toLocalDateString(parsed);
+}
+
+function formatDateParts(year, month, day) {
+  return `${String(year).padStart(4, "0")}-${String(month).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
 }
 
 function renderTaskText(task, resourceUrl) {
